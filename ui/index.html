@@ -1,39 +1,37 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Security Crawler Report</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Security Crawler Report</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<main>
-<h1>Security Crawler Report</h1>
-<section id="meta"></section>
-<section id="controls">
-<label>Filter severity:
-<select id="severity-filter">
-<option value="all">All</option>
-<option value="high">High</option>
-<option value="medium">Medium</option>
-<option value="low">Low</option>
-<option value="info">Info</option>
-</select>
-</label>
-<button id="refresh">Refresh</button>
-</section>
+  <main>
+    <h1>Security Crawler Report</h1>
+    <section id="meta"></section>
+    <section id="controls">
+      <label>Filter severity:
+        <select id="severity-filter">
+          <option value="all">All</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="info">Info</option>
+        </select>
+      </label>
+      <button id="refresh">Refresh</button>
+    </section>
 
+    <table id="issues-table">
+      <thead>
+        <tr><th>Severity</th><th>Category</th><th>URL</th><th>Description</th><th>Evidence</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-<table id="issues-table">
-<thead>
-<tr><th>Severity</th><th>Category</th><th>URL</th><th>Description</th><th>Evidence</th></tr>
-</thead>
-<tbody></tbody>
-</table>
-
-
-<details><summary>Raw JSON</summary><pre id="raw-json"></pre></details>
-</main>
-<script src="app.js"></script>
+    <details><summary>Raw JSON</summary><pre id="raw-json"></pre></details>
+  </main>
+  <script src="app.js"></script>
 </body>
 </html>
