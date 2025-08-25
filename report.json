@@ -1,0 +1,62 @@
+{
+  "pages": [
+    {
+      "url": "https://example.com/",
+      "status": 200,
+      "content_type": "text/html",
+      "secure_scheme": true,
+      "issues": [
+        {
+          "url": "https://example.com/",
+          "category": "header",
+          "severity": "medium",
+          "description": "Missing security header: Strict-Transport-Security",
+          "evidence": null
+        },
+        {
+          "url": "https://example.com/",
+          "category": "header",
+          "severity": "medium",
+          "description": "Missing security header: Content-Security-Policy",
+          "evidence": null
+        },
+        {
+          "url": "https://example.com/",
+          "category": "header",
+          "severity": "low",
+          "description": "Missing security header: X-Frame-Options",
+          "evidence": null
+        },
+        {
+          "url": "https://example.com/",
+          "category": "header",
+          "severity": "low",
+          "description": "Missing security header: X-Content-Type-Options",
+          "evidence": null
+        },
+        {
+          "url": "https://example.com/",
+          "category": "header",
+          "severity": "low",
+          "description": "Missing security header: Referrer-Policy",
+          "evidence": null
+        },
+        {
+          "url": "https://example.com/",
+          "category": "header",
+          "severity": "low",
+          "description": "Missing security header: Permissions-Policy",
+          "evidence": null
+        },
+        {
+          "url": "https://example.com/",
+          "category": "header",
+          "severity": "medium",
+          "description": "HSTS not present on HTTPS response",
+          "evidence": null
+        }
+      ]
+    }
+  ],
+  "issue_count": 7
+}

@@ -1,0 +1,8 @@
+url,status,content_type,secure_scheme,issue_category,severity,description,evidence
+https://example.com/,200,text/html,True,header,medium,Missing security header: Strict-Transport-Security,
+https://example.com/,200,text/html,True,header,medium,Missing security header: Content-Security-Policy,
+https://example.com/,200,text/html,True,header,low,Missing security header: X-Frame-Options,
+https://example.com/,200,text/html,True,header,low,Missing security header: X-Content-Type-Options,
+https://example.com/,200,text/html,True,header,low,Missing security header: Referrer-Policy,
+https://example.com/,200,text/html,True,header,low,Missing security header: Permissions-Policy,
+https://example.com/,200,text/html,True,header,medium,HSTS not present on HTTPS response,
