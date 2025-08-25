@@ -1,66 +1,57 @@
-name: Crawl & Publish Report
+name: Crawl and Publish Reports
 
 on:
   workflow_dispatch:
     inputs:
-      target_url:
-        description: 'Seed URL to crawl'
+      url:
+        description: 'Target website URL to crawl (must be your own site!)'
         required: true
-        default: 'https://<your-username>.github.io/<repo>/'
-      max_pages:
-        description: 'Max pages to crawl'
-        required: false
-        default: '200'
-      delay:
-        description: 'Delay between requests (seconds)'
-        required: false
-        default: '0.2'
+        default: 'https://example.com'
 
 jobs:
-  run-crawler:
+  crawl:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
+    permissions:
+      contents: write   # 👈 Needed to push results into repo
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Setup Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.10'
 
+      # 3. Install dependencies
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install requests beautifulsoup4 tldextract
 
+      # 4. Run crawler
       - name: Run crawler
         run: |
-          python passive_security_crawler.py --url "${{ github.event.inputs.target_url }}" --max-pages ${{ github.event.inputs.max_pages }} --delay ${{ github.event.inputs.delay }} --out-prefix report
+          python crawler.py --url "${{ github.event.inputs.url }}" --max-pages 50 --delay 1 --respect-robots true --out-prefix report
 
-      - name: Commit & push report to gh-pages
+      # 5. Commit and push reports into "reports" branch
+      - name: Commit and push reports
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Ensure branch exists
+          git fetch origin
+          git checkout -B reports
+
+          # Add reports
+          git add report.json report.csv || echo "No reports to add"
+          git commit -m "Add crawler reports for ${{ github.event.inputs.url }} [skip ci]" || echo "No changes to commit"
+
+          # Push to reports branch
+          git push origin reports
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -e
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Fetch or create gh-pages
-          git fetch origin gh-pages || true
-          if git rev-parse --verify origin/gh-pages >/dev/null 2>&1; then
-            git checkout gh-pages
-            git pull origin gh-pages
-          else
-            git checkout --orphan gh-pages
-            git rm -rf . || true
-            git commit --allow-empty -m "Init gh-pages"
-          fi
-
-          mkdir -p reports
-          cp report.json reports/report.json || true
-          cp report.csv reports/report.csv || true
-
-          git add reports/report.json reports/report.csv || true
-          git commit -m "Update crawler report: ${{ github.run_number }} for ${{ github.event.inputs.target_url }}" || echo "No changes to commit"
-          git push origin gh-pages
