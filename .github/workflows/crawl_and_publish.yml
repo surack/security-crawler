@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write   # 👈 Needed to push results into repo
+      contents: write   # Needed to push results into repo
 
     steps:
       # 1. Checkout repo
@@ -30,12 +30,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests beautifulsoup4 tldextract
+          pip install requests beautifulsoup4 tldextract pandas lxml
 
-      # 4. Run crawler
+      # 4. Run crawler (⚠️ updated filename!)
       - name: Run crawler
         run: |
-          python crawler.py --url "${{ github.event.inputs.url }}" --max-pages 50 --delay 1 --respect-robots true --out-prefix report
+          ls -lah
+          echo "Running crawler..."
+          python passive_security_crawler.py --url "${{ github.event.inputs.url }}" --max-pages 50 --delay 1 --respect-robots true --out-prefix report
 
       # 5. Commit and push reports into "reports" branch
       - name: Commit and push reports
@@ -43,15 +45,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Ensure branch exists
           git fetch origin
           git checkout -B reports
 
-          # Add reports
           git add report.json report.csv || echo "No reports to add"
           git commit -m "Add crawler reports for ${{ github.event.inputs.url }} [skip ci]" || echo "No changes to commit"
-
-          # Push to reports branch
           git push origin reports
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
